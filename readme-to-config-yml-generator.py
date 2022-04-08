@@ -1,11 +1,6 @@
 import os
 import re
-import copy
-from collections import defaultdict
-from collections import OrderedDict
-import json
-import yaml
-from grepfunc import grep
+from get_parent_elements import ReadFile
 
 f = open("D://Nil//charts//bitnami//drupal//README.md")
 values = f.readlines()
@@ -41,13 +36,27 @@ for i in values:
             for dirpath, dirnames, files in os.walk('D://Nil//charts//bitnami//drupal//templates'):
                 for file_name in files:
                     infile = open('D://Nil//charts//bitnami//drupal//templates//' + file_name, 'r')
-                    grep_result_list = grep(infile, ".Values." + name + " ")
-                    for single_grep_result in grep_result_list:
-                        if ': {{' in single_grep_result and ' include ' not in single_grep_result:
-                            print(single_grep_result)
-                            #print("---------------")
+                    for num, line in enumerate(infile, 1):
+                        if ".Values." + name + " " in line:
+                            if ': {{' in line and ' include ' not in line:
+                                print(file_name)
+                                print(line)
+                                print("Found at line: ", num)
+                                parents = ReadFile('D://Nil//charts//bitnami//drupal//templates//' + file_name, num)
+                                print(parents)
+                                print("---------------")
+                    #grep_result_list = grep(infile, ".Values." + name + " ")
+                    #for single_grep_result in grep_result_list:
+                    #    if ': {{' in single_grep_result and ' include ' not in single_grep_result:
+                    #        print(file_name)
+                    #        print(single_grep_result)
+                    #        #print("---------------")
 f.close()
 
-
+#Find path leading to certain value in helm chart
+f = open("D://Nil//charts//bitnami//drupal//templates//ingress.yaml")
+#yaml_in_dict_fotmat = yaml.load(f, Loader=yaml.FullLoader)
+#print(yaml_in_dict_fotmat)
+f.close()
 
 

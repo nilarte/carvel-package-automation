@@ -1,5 +1,25 @@
 import re
 import copy
+from collections import defaultdict
+from collections import OrderedDict
+import json
+import yaml
+def deep_dict():
+    return defaultdict(deep_dict)
+
+result = deep_dict()
+
+def deep_insert(key, desc, value):
+    d = result
+    # print(d)
+    keys = key.split(".")
+    for subkey in keys[:-1]:
+        d = d[subkey]
+        # print(d)
+
+    #d[keys[-1]]['desc'] = desc
+    d[keys[-1]] = value + " #@schema/desc " +  desc
+
 f=open("D://Nil//charts//bitnami//drupal//README.md")
 values = f.readlines()
 flag = False
@@ -43,7 +63,10 @@ for i in values:
             new = copy.deepcopy(name_dict)
 
             current_dict[name.split('.')[-1]] = {'description': splited_values[1], 'value' : re.search("`(.*)`", splited_values[2]).group(1)}
-
+            value_string = splited_values[2].replace("'", "")
+            value_string2 = value_string.replace("`", "")
+            print(value_string2)
+            deep_insert(name, splited_values[1], value_string2)
 
 
 if len(name_dict) > 0:
@@ -53,9 +76,9 @@ if len(name_dict) > 0:
 
 f.close()
 
-f1= open('test.yml', 'w')
+f1 = open('values.yml', 'w')
 
-y=''
+y = ''
 
 for key, value in values_dict.items():
     y +='\n\n#!' + key +':'
@@ -78,3 +101,17 @@ for key, value in values_dict.items():
 
 f1.write(y)
 f1.close()
+
+
+with open('data.json', 'w', encoding='utf-8') as f:
+    json.dump(result, f, ensure_ascii=False, indent=4)
+
+with open('data.json', 'r') as j:
+    with open('output.yaml', 'w') as y:
+        json_data = json.loads(j.read())
+        converted_json_data = json.dumps(json_data)
+
+        yaml_data = yaml.safe_load(converted_json_data)
+        converted_yaml_data = yaml.dump(yaml_data)
+        converted_yaml_data = converted_yaml_data.replace("'", "")
+        y.write(converted_yaml_data)
