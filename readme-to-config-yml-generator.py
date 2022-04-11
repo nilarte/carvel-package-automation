@@ -53,10 +53,5 @@ for i in values:
                     #        #print("---------------")
 f.close()
 
-#Find path leading to certain value in helm chart
-f = open("D://Nil//charts//bitnami//drupal//templates//ingress.yaml")
-#yaml_in_dict_fotmat = yaml.load(f, Loader=yaml.FullLoader)
-#print(yaml_in_dict_fotmat)
-f.close()
 
 
