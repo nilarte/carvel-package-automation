@@ -3,7 +3,7 @@ import re
 import json
 from get_parent_elements import ReadFile
 from get_set_value import setValue
-
+unsucessfull_additions_list = []
 f = open("D://Nil//charts//bitnami//drupal//README.md")
 values = f.readlines()
 flag = False
@@ -37,24 +37,32 @@ for i in values:
             # Walking a directory tree and printing the names of the directories and files
             for dirpath, dirnames, files in os.walk('D://Nil//charts//bitnami//drupal//templates'):
                 for file_name in files:
-                    infile = open('D://Nil//charts//bitnami//drupal//templates//' + file_name, 'r')
-                    for num, line in enumerate(infile, 1):
-                        if ".Values." + name + " " in line:
-                            if ': {{' in line and ' include ' not in line:
-                                print(name)
-                                print(file_name)
-                                print(line)
-                                split_str_with_colon_and_space = line.split(":")
-                                key_str = ((split_str_with_colon_and_space)[0]).strip()
-                                print(key_str)
-                                print("Found at line: ", num)
-                                parents = ReadFile('D://Nil//charts//bitnami//drupal//templates//' + file_name, num)
-                                print(parents)
-                                # reverse the list to be in right order which is from top to bottom
-                                parents.reverse()
-                                #setValue("D://Nil//VMWare_Bitnami_Carvel//Nil//output//deployment.yaml", parents,                                         "imagePullPolicy")
-                                print("---------------")
+                    if file_name.lower().endswith(('.yaml', '.yml')):
+                        infile = open('D://Nil//charts//bitnami//drupal//templates//' + file_name, 'r')
+                        for num, line in enumerate(infile, 1):
+                            if ".Values." + name + " " in line:
+                                if ': {{' in line and ' include ' not in line:
+                                    print(name)
+                                    print(file_name)
+                                    print(line)
+                                    split_str_with_colon_and_space = line.split(":")
+                                    key_name = ((split_str_with_colon_and_space)[0]).strip()
+                                    print(key_name)
+                                    print("Found at line: ", num)
+                                    parents = ReadFile('D://Nil//charts//bitnami//drupal//templates//' + file_name, num)
+                                    # reverse the list to be in right order which is from top to bottom
+                                    parents.reverse()
+                                    print(parents)
+                                    #try:
+                                    #    setValue("D://Nil//VMWare_Bitnami_Carvel//Nil//output//" + file_name, parents, key_name, name)
+                                    #except:
+                                    #    unsuccessful_entry = {'name': name, 'file_name': file_name, 'line': line, 'linenum': num}
+                                    #    unsucessfull_additions_list.append(unsuccessful_entry)
+                                    print("---------------")
 f.close()
+print("following entries could not be added")
+for entry in unsucessfull_additions_list:
+    print(entry)
 
 
 

@@ -19,13 +19,17 @@ def ReadFile(FileName, LineNo):
         if ListOfSpace[i] == SpaceCount:
             Result.append(ListOfStr[i])
             SpaceCount = int(ListOfSpace[i]) - 2
+            if SpaceCount < 0:
+                break
     for i in Result:
-        item = i.split(':')[0].strip()
-        ParentElem.append(item)
+        #item = i.split(':')[0].strip()
+        #ParentElem.append(item)
+        ParentElem.append(i.strip('\n'))
+
     return ParentElem
 
-#parents = ReadFile('D://Nil//charts//bitnami//drupal//templates//deployment.yaml',92)
-#print(parents)
+parents = ReadFile('D://Nil//charts//bitnami//drupal//templates//deployment.yaml',92)
+print(parents)
 
 
 

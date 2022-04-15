@@ -1,10 +1,12 @@
 import yaml
-def setValue(file_name, parent_list, key_name):
+
+
+def setValue(file_name, parent_list, key_name, value_name):
     f = open(file_name)
     file_content = f.read()
     content_without_load_statements = file_content.split('---')[1]
     root_parent = yaml.load(content_without_load_statements, Loader=yaml.Loader)
-    for index,parent in enumerate(parent_list, 1):
+    for index, parent in enumerate(parent_list, 1):
         if not parent.startswith('- '):
             root_parent = root_parent[parent]
         else:
@@ -22,9 +24,10 @@ def setValue(file_name, parent_list, key_name):
                     if key_name in yaml_list_element:
                         root_parent = yaml_list_element
                         break
-
-
-    print(root_parent)
+            else:
+                continue
+        break
+    root_parent[key_name] = value_name
     print(root_parent[key_name])
 
 # parent_list = ['- name', 'containers', 'spec', 'template', 'spec']
