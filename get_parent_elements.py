@@ -23,8 +23,9 @@ def ReadFile(FileName, LineNo):
         item = i.split(':')[0].strip()
         ParentElem.append(item)
     return ParentElem
-parents = ReadFile('D://Nil//charts//bitnami//drupal//templates//deployment.yaml',92)
-print(parents)
+
+#parents = ReadFile('D://Nil//charts//bitnami//drupal//templates//deployment.yaml',92)
+#print(parents)
 
 
 

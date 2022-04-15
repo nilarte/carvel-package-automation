@@ -1,6 +1,8 @@
 import os
 import re
+import json
 from get_parent_elements import ReadFile
+from get_set_value import setValue
 
 f = open("D://Nil//charts//bitnami//drupal//README.md")
 values = f.readlines()
@@ -39,18 +41,19 @@ for i in values:
                     for num, line in enumerate(infile, 1):
                         if ".Values." + name + " " in line:
                             if ': {{' in line and ' include ' not in line:
+                                print(name)
                                 print(file_name)
                                 print(line)
+                                split_str_with_colon_and_space = line.split(":")
+                                key_str = ((split_str_with_colon_and_space)[0]).strip()
+                                print(key_str)
                                 print("Found at line: ", num)
                                 parents = ReadFile('D://Nil//charts//bitnami//drupal//templates//' + file_name, num)
                                 print(parents)
+                                # reverse the list to be in right order which is from top to bottom
+                                parents.reverse()
+                                #setValue("D://Nil//VMWare_Bitnami_Carvel//Nil//output//deployment.yaml", parents,                                         "imagePullPolicy")
                                 print("---------------")
-                    #grep_result_list = grep(infile, ".Values." + name + " ")
-                    #for single_grep_result in grep_result_list:
-                    #    if ': {{' in single_grep_result and ' include ' not in single_grep_result:
-                    #        print(file_name)
-                    #        print(single_grep_result)
-                    #        #print("---------------")
 f.close()
 
 

@@ -1,5 +1,8 @@
-#Find path leading to certain value in helm chart
-import yaml
+import os
+
+output_dir = "D://Nil//VMWare_Bitnami_Carvel//Nil//output"
+for file in os.listdir(output_dir):
+    os.remove(os.path.join(output_dir, file))
 
 f = open("D://Nil//VMWare_Bitnami_Carvel//Nil//config.yml")
 file_content = f.read()
@@ -12,8 +15,9 @@ for config_file in config_files_list:
         file_name = first_line.rsplit('/', 1)[1]
         print(file_name)
         # open new yaml file
-        yaml_file = open("D://Nil//VMWare_Bitnami_Carvel//Nil//output//" + file_name, "w")
-        # Always write these 2 lines
+        yaml_file = open(os.path.join(output_dir, file_name), "w")
+        # Always write these lines
+        yaml_file.write('#@ load("@ytt:base64", "base64")\n')
         yaml_file.write('#@ load("@ytt:data", "data")\n')
         yaml_file.write('---')
         # write string to file
