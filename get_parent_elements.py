@@ -22,14 +22,18 @@ def ReadFile(FileName, LineNo):
             if SpaceCount < 0:
                 break
     for i in Result:
-        #item = i.split(':')[0].strip()
-        #ParentElem.append(item)
-        ParentElem.append(i.strip('\n'))
+        # if it's an array element then get the whole line or parent search will always look for first array element
+        if "- " in i.split(':')[0] in i and " {{ include " not in i:
+            item = i.strip('\n')
+        else:
+            item = i.split(':')[0].strip()
+        ParentElem.append(item)
+
 
     return ParentElem
 
-parents = ReadFile('D://Nil//charts//bitnami//drupal//templates//deployment.yaml',92)
-print(parents)
+#parents = ReadFile('D://Nil//charts//bitnami//drupal//templates//deployment.yaml',92)
+#print(parents)
 
 
 

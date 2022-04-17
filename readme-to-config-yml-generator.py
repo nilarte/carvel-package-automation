@@ -2,8 +2,10 @@ import os
 import re
 import json
 from get_parent_elements import ReadFile
-from get_set_value import setValue
+from set_value_via_parent_elements import setValue
+
 unsucessfull_additions_list = []
+count = 0
 f = open("D://Nil//charts//bitnami//drupal//README.md")
 values = f.readlines()
 flag = False
@@ -42,6 +44,7 @@ for i in values:
                         for num, line in enumerate(infile, 1):
                             if ".Values." + name + " " in line:
                                 if ': {{' in line and ' include ' not in line:
+                                    count = count + 1
                                     print(name)
                                     print(file_name)
                                     print(line)
@@ -53,13 +56,18 @@ for i in values:
                                     # reverse the list to be in right order which is from top to bottom
                                     parents.reverse()
                                     print(parents)
-                                    #try:
-                                    #    setValue("D://Nil//VMWare_Bitnami_Carvel//Nil//output//" + file_name, parents, key_name, name)
-                                    #except:
-                                    #    unsuccessful_entry = {'name': name, 'file_name': file_name, 'line': line, 'linenum': num}
-                                    #    unsucessfull_additions_list.append(unsuccessful_entry)
+                                    result = ""
+                                    try:
+                                        result = setValue(file_name, parents, key_name, name)
+                                    except:
+                                        unsuccessful_entry = {'reason': 'exception', 'name': name, 'file_name': file_name, 'line': line, 'linenum': num}
+                                        unsucessfull_additions_list.append(unsuccessful_entry)
+                                    if len(result) > 0:
+                                        unsuccessful_entry = {'reason': result, 'name': name, 'file_name': file_name, 'line': line, 'linenum': num}
+                                        unsucessfull_additions_list.append(unsuccessful_entry)
                                     print("---------------")
 f.close()
+print("COUNT:" + str(count))
 print("following entries could not be added")
 for entry in unsucessfull_additions_list:
     print(entry)
