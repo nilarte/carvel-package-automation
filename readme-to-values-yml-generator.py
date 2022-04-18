@@ -4,6 +4,8 @@ from collections import defaultdict
 from collections import OrderedDict
 import json
 import yaml
+import argparse
+
 def deep_dict():
     return defaultdict(deep_dict)
 
@@ -18,9 +20,16 @@ def deep_insert(key, desc, value):
         # print(d)
 
     #d[keys[-1]]['desc'] = desc
-    d[keys[-1]] = value + " #@schema/desc " +  desc
+    d[keys[-1]] = value + " #@schema/desc " + desc
 
-f=open("D://Nil//charts//bitnami//drupal//README.md")
+ap = argparse.ArgumentParser()
+ap.add_argument("-cl", "--chartLocation", required=True,
+	help="path for specific bitnami application chart folder")
+args = vars(ap.parse_args())
+chart_location = args["chartLocation"]
+print(chart_location)
+
+f = open(chart_location + '//README.md')
 values = f.readlines()
 flag = False
 values_dict = {}
@@ -84,19 +93,19 @@ for key, value in values_dict.items():
     y +='\n\n#!' + key +':'
     for key1, val1 in value[0].items():
         if 'description' in val1:
-            y += '\n#@schema/desc ' + val1['description']
+            y += '\n#@schema/desc "' + val1['description'] + '"'
             y += '\n'+key1 + ': ' + val1['value']
         else:
             y += '\n'+key1 + ':'
             for key2, val2 in val1.items():
                 if 'description' in val2:
-                    y += '\n  #@schema/desc ' + val2['description']
+                    y += '\n  #@schema/desc "' + val2['description'] + '"'
                     y += '\n  ' + key2 + ': ' + val2['value']
                 else:
                     y += '\n  ' + key2 + ':'
                     for key3, val3 in val2.items():
                         if 'description' in val3:
-                            y += '\n    #@schema/desc ' + val3['description']
+                            y += '\n    #@schema/desc "' + val3['description'] + '"'
                             y += '\n    ' + key3 + ': ' + val3['value']
 
 f1.write(y)
