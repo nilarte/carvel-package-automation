@@ -23,9 +23,9 @@ def setValue(FileName, parent_list, key_name, value_name):
                 start_line_num = i
                 line_with_key = text[i]
                 str_old_value = line_with_key.split(":")[1]
-                if "REPLACED9999" in str_old_value:
-                    print("DOUBLE9999")
-                line_with_key = line_with_key.replace(str_old_value, " REPLACED9999 " + value_name + '\n')
+                if " #@ data.values." in str_old_value:
+                    print("DOUBLE!!!")
+                line_with_key = line_with_key.replace(str_old_value, " #@ data.values." + value_name + '\n')
                 text[i] = line_with_key
                 break
         if not key_found:
