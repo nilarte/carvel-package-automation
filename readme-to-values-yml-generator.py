@@ -43,7 +43,7 @@ for i in values:
         flag = True
     if flag:
         # val = re.search("`(.*)`", i.strip())
-        if i.strip(' #\n').endswith('parameters'):
+        if i.strip(' #\n').lower().endswith(' parameters'):
             temp_val = i.strip(' #\n')
             values_dict[temp_val] = []
             continue
