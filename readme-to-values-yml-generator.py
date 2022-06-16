@@ -74,7 +74,7 @@ for i in values:
             current_dict[name.split('.')[-1]] = {'description': splited_values[1], 'value' : re.search("`(.*)`", splited_values[2]).group(1)}
             value_string = splited_values[2].replace("'", "")
             value_string2 = value_string.replace("`", "")
-            print(value_string2)
+            #print(value_string2)
             deep_insert(name, splited_values[1], value_string2)
 
 
@@ -91,7 +91,11 @@ y = ''
 
 for key, value in values_dict.items():
     y +='\n\n#!' + key +':'
+    # Don't proceess if value is empty just continue
+    if not value:
+        continue
     for key1, val1 in value[0].items():
+        print(key1)
         if 'description' in val1:
             y += '\n#@schema/desc "' + val1['description'] + '"'
             y += '\n'+key1 + ': ' + val1['value']
